@@ -1,5 +1,7 @@
 package edu.upc.eseiaat.pma.countrylist;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,9 +41,21 @@ public class CountryListActivity extends AppCompatActivity {
 
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View item, int pos, long id) {
-                country_list.remove(pos);
-                adapter.notifyDataSetChanged();
+            public boolean onItemLongClick(AdapterView<?> parent, View item, final int pos, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CountryListActivity.this);
+                builder.setTitle(R.string.confirm);
+                String msg = getResources().getString(R.string.confirm_message);
+                builder.setMessage(msg + country_list.get(pos) + "?");
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        country_list.remove(pos);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                builder.setNegativeButton(android.R.string.no, null);
+                builder.create().show();
                 return true;
             }
         });
