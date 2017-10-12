@@ -19,12 +19,20 @@ public class CountryListActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList("country_list", country_list);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_list);
 
-        String[] countries = getResources().getStringArray(R.array.countries);
-        country_list = new ArrayList<>(Arrays.asList(countries));
+        final String[] countries = getResources().getStringArray(R.array.countries);
+
+        if (savedInstanceState==null){country_list = new ArrayList<>(Arrays.asList(countries));}
+        else {country_list=savedInstanceState.getStringArrayList("country_list");}
 
         ListView list = (ListView) findViewById(R.id.country_list);
 
